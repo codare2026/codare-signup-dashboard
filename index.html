@@ -27,7 +27,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);
 .btn-refresh{background:var(--teal);color:white;border:none;padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:background 0.2s;}
 .btn-refresh:hover{background:var(--teal-dark);}
 .content{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px;}
 .stat-card{background:white;border-radius:14px;padding:20px;box-shadow:var(--shadow);border-top:3px solid transparent;cursor:pointer;transition:box-shadow 0.2s,transform 0.2s;}
 .stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
 .stat-card.teal{border-top-color:var(--teal);}
@@ -112,8 +112,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);
   <div class="stats-row">
     <div class="stat-card teal" onclick="scrollToSec('sec-today')"><div class="stat-num" id="stat-today">—</div><div class="stat-label">今日新報名</div><div class="stat-sub">尚未建立帳號</div></div>
     <div class="stat-card amber" onclick="scrollToSec('sec-pending')"><div class="stat-num" id="stat-pending">—</div><div class="stat-label">全部待建檔</div><div class="stat-sub">已填表但未建帳號</div></div>
-    <div class="stat-card red" onclick="scrollToSec('sec-3day')"><div class="stat-num" id="stat-3day">—</div><div class="stat-label">3 天未處理</div><div class="stat-sub">需要主動追蹤</div></div>
-    <div class="stat-card purple" onclick="scrollToSec('sec-7day')"><div class="stat-num" id="stat-7day">—</div><div class="stat-label">7 天未處理</div><div class="stat-sub">高流失風險</div></div>
+
   </div>
 
   <div class="section-card" id="sec-today">
@@ -132,49 +131,84 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);
       <div class="section-title">📋 全部待建檔<span class="badge badge-amber" id="badge-pending">0</span></div>
       <span style="font-size:12px;color:var(--g4)">後台建立學員後自動更新</span>
     </div>
+    <!-- 篩選工具列 -->
+    <div style="padding:12px 16px;background:var(--g0);border-bottom:1px solid var(--g2);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">排序</span>
+        <select id="filter-sort" onchange="applyFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
+          <option value="new">🕐 最新優先</option>
+          <option value="old">🕑 最舊優先</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">負責人</span>
+        <select id="filter-rd" onchange="applyFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
+          <option value="">全部</option>
+          <option value="tingxuan">亭瑄</option>
+          <option value="chengfang">承芳</option>
+          <option value="yutong">禹彤</option>
+          <option value="shengwei">勝崴</option>
+          <option value="__none__">尚未認領</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:160px;">
+        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">搜尋</span>
+        <input type="text" id="filter-search" oninput="applyFilter()" placeholder="姓名 / 電話 / LINE ID…" style="flex:1;padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;min-width:0;">
+      </div>
+      <button onclick="resetFilter()" style="padding:6px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;background:white;cursor:pointer;color:var(--g5);font-family:inherit;white-space:nowrap;">✕ 清除</button>
+      <span id="filter-count" style="font-size:12px;color:var(--g4);white-space:nowrap"></span>
+    </div>
     <table class="tbl">
       <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>報名時間</th><th>等待</th><th>認領負責人</th><th>操作</th></tr></thead>
       <tbody id="tbody-pending"><tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr></tbody>
     </table>
   </div>
 
-  <div class="section-card" id="sec-3day">
-    <div class="section-header">
-      <div class="section-title">⚠️ 3 天未處理<span class="badge badge-red" id="badge-3day">0</span></div>
-      <span style="font-size:12px;color:var(--g5)">建議主動 LINE 聯繫</span>
-    </div>
-    <table class="tbl">
-      <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>報名時間</th><th>等待</th><th>認領負責人</th><th>操作</th></tr></thead>
-      <tbody id="tbody-3day"><tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr></tbody>
-    </table>
-  </div>
-
-  <div class="section-card" id="sec-7day">
-    <div class="section-header">
-      <div class="section-title">🚨 7 天未處理<span class="badge badge-purple" id="badge-7day">0</span></div>
-      <span style="font-size:12px;color:var(--g5)">高流失風險，請優先跟進</span>
-    </div>
-    <table class="tbl">
-      <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>報名時間</th><th>等待</th><th>認領負責人</th><th>操作</th></tr></thead>
-      <tbody id="tbody-7day"><tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr></tbody>
-    </table>
-  </div>
-
+  <!-- ✅ 已建立帳號 -->
   <div class="section-card" id="sec-done">
-    <div class="section-header" style="cursor:pointer" onclick="toggleDone()">
+    <div class="section-header">
       <div class="section-title">
-        ✅ 已建立帳號（後台建立後自動出現）
+        ✅ 已建立帳號
         <span class="badge" style="background:var(--green-light);color:#166534" id="badge-done">0</span>
+        <span style="font-size:11px;font-weight:400;color:var(--g4)">後台建立後自動出現</span>
       </div>
-      <span id="done-icon" style="color:var(--g4);font-size:18px">▸</span>
+      <span style="font-size:12px;color:var(--g4)">已完成建檔的學員</span>
     </div>
-    <div id="done-body" style="display:none">
+    <!-- 篩選工具列 -->
+    <div style="padding:12px 16px;background:var(--g0);border-bottom:1px solid var(--g2);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">排序</span>
+        <select id="done-sort" onchange="applyDoneFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
+          <option value="new">🕐 最新優先</option>
+          <option value="old">🕑 最舊優先</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">負責人</span>
+        <select id="done-rd" onchange="applyDoneFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
+          <option value="">全部</option>
+          <option value="tingxuan">亭瑄</option>
+          <option value="chengfang">承芳</option>
+          <option value="yutong">禹彤</option>
+          <option value="shengwei">勝崴</option>
+          <option value="__none__">未指定</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:160px;">
+        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">搜尋</span>
+        <input type="text" id="done-search" oninput="applyDoneFilter()" placeholder="姓名 / 電話 / LINE ID…" style="flex:1;padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;min-width:0;">
+      </div>
+      <button onclick="resetDoneFilter()" style="padding:6px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;background:white;cursor:pointer;color:var(--g5);font-family:inherit;white-space:nowrap;">✕ 清除</button>
+      <span id="done-count" style="font-size:12px;color:var(--g4);white-space:nowrap"></span>
+    </div>
+    <div id="done-body" style="display:block">
       <table class="tbl">
         <thead><tr><th>姓名</th><th>電話</th><th>負責營養師</th><th>報名時間</th><th>操作</th></tr></thead>
-        <tbody id="tbody-done"></tbody>
+        <tbody id="tbody-done"><tr class="loading-row"><td colspan="5"><span class="spin"></span>從後台同步中…</td></tr></tbody>
       </table>
     </div>
   </div>
+
 </div>
 
 <div class="modal-overlay" id="modal-create">
@@ -253,25 +287,22 @@ async function loadAll(){
     const pending=signups.filter(r=>!r.isCreated);
     const done=signups.filter(r=>r.isCreated);
     const today=pending.filter(r=>isToday(r.submittedAt));
-    const d3=pending.filter(r=>daysDiff(r.submittedAt)>=3);
-    const d7=pending.filter(r=>daysDiff(r.submittedAt)>=7);
-    ['today','pending','3day','7day'].forEach((id,i)=>{
-      const n=[today,pending,d3,d7][i].length;
-      document.getElementById('stat-'+id).textContent=n;
-      document.getElementById('badge-'+id).textContent=n;
+    [['today',today],['pending',pending]].forEach(([id,list])=>{
+      document.getElementById('stat-'+id).textContent=list.length;
+      document.getElementById('badge-'+id).textContent=list.length;
     });
     document.getElementById('badge-done').textContent=done.length;
     document.getElementById('today-date').textContent=new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+    _pendingAll = pending;
+    _doneAll = done;
     renderTable('tbody-today',today,false);
-    renderTable('tbody-pending',pending,true);
-    renderTable('tbody-3day',d3,true);
-    renderTable('tbody-7day',d7,true);
-    renderDone(done);
+    applyFilter();
+    applyDoneFilter();
   }catch(e){console.error(e);toast('⚠️ 同步失敗：'+e.message);}
   document.getElementById('last-refresh').textContent='最後同步：'+new Date().toLocaleTimeString('zh-TW');
 }
 
-function setLoading(){['today','pending','3day','7day'].forEach(id=>{const el=document.getElementById('tbody-'+id);if(el)el.innerHTML='<tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr>';});}
+function setLoading(){['today','pending'].forEach(id=>{const el=document.getElementById('tbody-'+id);if(el)el.innerHTML='<tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr>';});}
 
 function renderTable(id,list,showDays){
   const tb=document.getElementById(id);
@@ -384,6 +415,120 @@ document.getElementById('modal-create').addEventListener('click',function(e){if(
 
 loadAll();
 setInterval(loadAll,3*60*1000);
+
+// 篩選欄位 focus 樣式
+['filter-sort','filter-rd','filter-search','done-sort','done-rd','done-search'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('focus', () => el.style.borderColor = 'var(--teal)');
+  el.addEventListener('blur',  () => el.style.borderColor = 'var(--g2)');
+});
+
+// ── 全部待建檔篩選 ──
+let _pendingAll = []; // 儲存原始 pending 清單供篩選用
+
+function applyFilter() {
+  const sort   = document.getElementById('filter-sort')?.value || 'new';
+  const rdFilter = document.getElementById('filter-rd')?.value || '';
+  const search = (document.getElementById('filter-search')?.value || '').trim().toLowerCase();
+
+  let list = [..._pendingAll];
+
+  // 篩選負責人
+  if (rdFilter === '__none__') {
+    list = list.filter(r => !r.claimedBy);
+  } else if (rdFilter) {
+    list = list.filter(r => r.claimedBy === rdFilter);
+  }
+
+  // 搜尋姓名 / 電話 / LINE ID
+  if (search) {
+    list = list.filter(r =>
+      r.name.toLowerCase().includes(search) ||
+      r.phone.includes(search) ||
+      r.lineId.toLowerCase().includes(search)
+    );
+  }
+
+  // 排序
+  list.sort((a, b) => {
+    const ta = new Date(a.submittedAt || 0).getTime();
+    const tb = new Date(b.submittedAt || 0).getTime();
+    return sort === 'old' ? ta - tb : tb - ta;
+  });
+
+  // 更新計數提示
+  const countEl = document.getElementById('filter-count');
+  if (countEl) {
+    const isFiltered = rdFilter || search;
+    countEl.textContent = isFiltered ? `顯示 ${list.length} / ${_pendingAll.length} 筆` : `共 ${_pendingAll.length} 筆`;
+  }
+
+  renderTable('tbody-pending', list, true);
+}
+
+function resetFilter() {
+  const s = document.getElementById('filter-sort');
+  const r = document.getElementById('filter-rd');
+  const q = document.getElementById('filter-search');
+  if (s) s.value = 'new';
+  if (r) r.value = '';
+  if (q) q.value = '';
+  applyFilter();
+}
+
+// ── 已建立帳號篩選 ──
+let _doneAll = [];
+
+function applyDoneFilter() {
+  const sort   = document.getElementById('done-sort')?.value || 'new';
+  const rdFilter = document.getElementById('done-rd')?.value || '';
+  const search = (document.getElementById('done-search')?.value || '').trim().toLowerCase();
+
+  let list = [..._doneAll];
+
+  // 篩選負責人
+  if (rdFilter === '__none__') {
+    list = list.filter(r => !r.rdId);
+  } else if (rdFilter) {
+    list = list.filter(r => r.rdId === rdFilter);
+  }
+
+  // 搜尋姓名 / 電話 / LINE ID
+  if (search) {
+    list = list.filter(r =>
+      r.name.toLowerCase().includes(search) ||
+      r.phone.includes(search) ||
+      (r.lineId || '').toLowerCase().includes(search)
+    );
+  }
+
+  // 排序
+  list.sort((a, b) => {
+    const ta = new Date(a.submittedAt || 0).getTime();
+    const tb = new Date(b.submittedAt || 0).getTime();
+    return sort === 'old' ? ta - tb : tb - ta;
+  });
+
+  // 更新計數
+  const countEl = document.getElementById('done-count');
+  if (countEl) {
+    const isFiltered = rdFilter || search;
+    countEl.textContent = isFiltered ? `顯示 ${list.length} / ${_doneAll.length} 筆` : `共 ${_doneAll.length} 筆`;
+  }
+
+  renderDone(list);
+}
+
+function resetDoneFilter() {
+  const s = document.getElementById('done-sort');
+  const r = document.getElementById('done-rd');
+  const q = document.getElementById('done-search');
+  if (s) s.value = 'new';
+  if (r) r.value = '';
+  if (q) q.value = '';
+  applyDoneFilter();
+}
 </script>
 </body>
 </html>
