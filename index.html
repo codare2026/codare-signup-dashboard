@@ -11,206 +11,251 @@
   --amber:#f59e0b;--amber-light:#fef3c7;
   --red:#ef4444;--red-light:#fee2e2;
   --green:#22c55e;--green-light:#dcfce7;
-  --purple:#8b5cf6;--purple-light:#ede9fe;
   --blue:#3b82f6;--blue-light:#eff6ff;
+  --purple:#8b5cf6;--purple-light:#ede9fe;
   --g0:#f8fafc;--g1:#f1f5f9;--g2:#e2e8f0;
   --g4:#94a3b8;--g5:#64748b;--g7:#334155;--g9:#0f172a;
-  --shadow:0 1px 3px rgba(0,0,0,0.07);--shadow-md:0 4px 16px rgba(0,0,0,0.08);
+  --shadow:0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);font-size:14px;}
-.topbar{background:var(--g9);color:white;padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.topbar-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:10px;}
-.topbar-right{display:flex;align-items:center;gap:12px;font-size:13px;color:rgba(255,255,255,0.6);}
-.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.btn-refresh{background:var(--teal);color:white;border:none;padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;transition:background 0.2s;}
-.btn-refresh:hover{background:var(--teal-dark);}
-.content{max-width:1100px;margin:0 auto;padding:28px 20px 60px;}
-.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px;}
-.stat-card{background:white;border-radius:14px;padding:20px;box-shadow:var(--shadow);border-top:3px solid transparent;cursor:pointer;transition:box-shadow 0.2s,transform 0.2s;}
+
+.topbar{background:var(--g9);color:white;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-left{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;}
+.topbar-right{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.sync-dot.loading{background:var(--amber);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.btn-sync{background:var(--teal);color:white;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;}
+.btn-sync:hover{background:var(--teal-dark);}
+
+.content{max-width:1060px;margin:0 auto;padding:24px 16px 60px;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+.stat-card{background:white;border-radius:12px;padding:18px 20px;box-shadow:var(--shadow);border-left:4px solid transparent;cursor:pointer;transition:box-shadow 0.2s,transform 0.2s;}
 .stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
-.stat-card.teal{border-top-color:var(--teal);}
-.stat-card.amber{border-top-color:var(--amber);}
-.stat-card.red{border-top-color:var(--red);}
-.stat-card.purple{border-top-color:var(--purple);}
-.stat-num{font-size:32px;font-weight:900;line-height:1;margin-bottom:6px;}
+.stat-card.teal{border-left-color:var(--teal);}
+.stat-card.amber{border-left-color:var(--amber);}
+.stat-num{font-size:30px;font-weight:900;line-height:1;margin-bottom:4px;}
 .stat-card.teal .stat-num{color:var(--teal);}
 .stat-card.amber .stat-num{color:var(--amber);}
-.stat-card.red .stat-num{color:var(--red);}
-.stat-card.purple .stat-num{color:var(--purple);}
 .stat-label{font-size:12px;color:var(--g5);font-weight:500;}
-.stat-sub{font-size:11px;color:var(--g4);margin-top:4px;}
-.section-card{background:white;border-radius:14px;box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden;}
-.section-header{padding:16px 20px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;}
-.section-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:11px;font-size:11px;font-weight:700;padding:0 7px;}
+.stat-sub{font-size:11px;color:var(--g4);margin-top:3px;}
+
+/* ERROR BOX */
+.error-box{background:#fff1f2;border:1.5px solid #fca5a5;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:none;}
+.error-box.show{display:block;}
+.error-title{font-weight:700;color:#dc2626;margin-bottom:6px;font-size:14px;}
+.error-msg{font-size:13px;color:#7f1d1d;line-height:1.6;}
+
+/* SECTION CARD */
+.section-card{background:white;border-radius:12px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden;}
+.section-header{padding:14px 18px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.section-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px;}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:10px;font-size:11px;font-weight:700;padding:0 6px;}
 .badge-teal{background:var(--teal-light);color:var(--teal-dark);}
 .badge-amber{background:var(--amber-light);color:#92400e;}
-.badge-red{background:var(--red-light);color:var(--red);}
-.badge-purple{background:var(--purple-light);color:#5b21b6;}
+.badge-green{background:var(--green-light);color:#166534;}
+
+/* FILTER BAR */
+.filter-bar{padding:10px 16px;background:var(--g0);border-bottom:1px solid var(--g2);display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.filter-bar select,.filter-bar input{padding:5px 9px;border:1.5px solid var(--g2);border-radius:7px;font-size:12px;font-family:inherit;outline:none;background:white;transition:border-color 0.2s;}
+.filter-bar select:focus,.filter-bar input:focus{border-color:var(--teal);}
+.filter-bar .filter-label{font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap;}
+.filter-count{font-size:11px;color:var(--g4);white-space:nowrap;}
+.btn-clear{padding:5px 10px;border:1.5px solid var(--g2);border-radius:7px;font-size:11px;background:white;cursor:pointer;color:var(--g5);font-family:inherit;}
+.btn-clear:hover{border-color:var(--g4);}
+
+/* TABLE */
 .tbl{width:100%;border-collapse:collapse;}
-.tbl th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--g4);background:var(--g0);border-bottom:1px solid var(--g2);letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap;}
-.tbl td{padding:13px 14px;border-bottom:1px solid var(--g1);vertical-align:middle;}
+.tbl th{padding:9px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--g4);background:var(--g0);border-bottom:1px solid var(--g2);letter-spacing:0.5px;white-space:nowrap;}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--g1);vertical-align:middle;}
 .tbl tr:last-child td{border-bottom:none;}
 .tbl tr:hover td{background:var(--g0);}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .chip-pending{background:var(--amber-light);color:#92400e;}
-.chip-done{background:var(--green-light);color:#166534;}
-.rd-tag{display:inline-flex;align-items:center;gap:4px;background:var(--teal-light);color:var(--teal-dark);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
-.claim-select{padding:5px 8px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;}
-.claim-select:focus{border-color:var(--teal);}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+.chip-days{background:var(--red-light);color:var(--red);}
+.chip-rd{background:var(--teal-light);color:var(--teal-dark);}
+.chip-new{background:#dbeafe;color:#1e40af;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:7px;font-size:11px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:all 0.15s;white-space:nowrap;}
 .btn-teal{background:var(--teal);color:white;}
 .btn-teal:hover{background:var(--teal-dark);}
 .btn-outline{background:white;color:var(--g5);border:1.5px solid var(--g2);}
-.btn-outline:hover{border-color:var(--g4);color:var(--g7);}
-.btn-sm{padding:4px 10px;font-size:11px;}
-.empty-state{text-align:center;padding:40px 24px;color:var(--g4);}
-.empty-icon{font-size:36px;margin-bottom:10px;}
+.btn-outline:hover{border-color:var(--g4);}
+.btn-red{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5;}
+.btn-red:hover{background:#fecaca;}
+
+/* CLAIM SELECT */
+.claim-select{padding:4px 8px;border:1.5px solid var(--g2);border-radius:7px;font-size:11px;font-family:inherit;outline:none;background:white;cursor:pointer;}
+.claim-select:focus{border-color:var(--teal);}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:36px 20px;color:var(--g4);}
+.empty-icon{font-size:32px;margin-bottom:8px;}
 .empty-text{font-size:13px;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+
+/* LOADING ROW */
+.loading-row td{text-align:center;padding:36px;color:var(--g4);font-size:13px;}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--g2);border-top-color:var(--teal);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
 .modal-overlay.open{display:flex;}
-.modal{background:white;border-radius:16px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);animation:mIn 0.25s cubic-bezier(.34,1.56,.64,1);}
-@keyframes mIn{from{opacity:0;transform:scale(0.92) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.modal-header{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.modal-header h2{font-size:17px;font-weight:700;}
-.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--g4);}
-.modal-body{padding:0 24px 20px;}
-.modal-footer{padding:14px 24px;border-top:1px solid var(--g2);display:flex;justify-content:flex-end;gap:8px;}
-.fld{margin-bottom:14px;}
-.fld label{display:block;font-size:12px;font-weight:700;color:var(--g5);margin-bottom:5px;}
-.fld input,.fld select{width:100%;padding:9px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border-color 0.2s;background:var(--g0);}
+.modal{background:white;border-radius:14px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);animation:mIn 0.22s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(0.93) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-header{padding:18px 22px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.modal-header h2{font-size:16px;font-weight:700;}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--g4);line-height:1;}
+.modal-body{padding:0 22px 18px;}
+.modal-footer{padding:12px 22px;border-top:1px solid var(--g2);display:flex;justify-content:flex-end;gap:8px;}
+
+/* FORM */
+.fld{margin-bottom:12px;}
+.fld label{display:block;font-size:11px;font-weight:700;color:var(--g5);margin-bottom:4px;letter-spacing:0.3px;}
+.fld input,.fld select{width:100%;padding:8px 11px;border:1.5px solid var(--g2);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border-color 0.2s;background:var(--g0);}
 .fld input:focus,.fld select:focus{border-color:var(--teal);background:white;}
-.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.intake-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--g0);border-radius:10px;padding:14px;margin-bottom:14px;}
-.intake-item{display:flex;flex-direction:column;gap:2px;}
-.intake-key{color:var(--g4);font-size:11px;}
-.intake-val{color:var(--g7);font-weight:500;font-size:12px;}
-.notice{padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;line-height:1.6;}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* INTAKE PREVIEW */
+.intake-preview{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:var(--g0);border-radius:9px;padding:12px;margin-bottom:12px;}
+.ip-item{display:flex;flex-direction:column;gap:1px;}
+.ip-key{color:var(--g4);font-size:10px;}
+.ip-val{color:var(--g7);font-weight:500;font-size:12px;word-break:break-all;}
+
+/* NOTICE */
+.notice{padding:9px 13px;border-radius:8px;font-size:12px;margin-bottom:12px;display:flex;gap:7px;line-height:1.6;}
 .notice.teal{background:var(--teal-light);border-left:3px solid var(--teal);color:var(--teal-dark);}
 .notice.blue{background:var(--blue-light);border-left:3px solid var(--blue);color:#1e40af;}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--g9);color:white;padding:12px 20px;border-radius:12px;font-size:13px;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.3s;pointer-events:none;max-width:320px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--g9);color:white;padding:11px 18px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(6px);transition:all 0.3s;pointer-events:none;max-width:300px;}
 .toast.show{opacity:1;transform:translateY(0);}
-.spin{display:inline-block;width:18px;height:18px;border:2px solid var(--g2);border-top-color:var(--teal);border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loading-row td{text-align:center;padding:40px;color:var(--g4);font-size:13px;}
-@media(max-width:700px){.stats-row{grid-template-columns:1fr 1fr;}.fld-row{grid-template-columns:1fr;}}
+
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .fld-row{grid-template-columns:1fr;}
+  .tbl th:nth-child(3),.tbl td:nth-child(3){display:none;}
+}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-title">🦭 Co-Dare 報名管理儀表板<div class="sync-dot" title="每3分鐘自動同步"></div></div>
+  <div class="topbar-left">
+    <div class="sync-dot" id="sync-dot"></div>
+    🦭 Co-Dare 報名管理儀表板
+  </div>
   <div class="topbar-right">
-    <span id="last-refresh">載入中…</span>
-    <button class="btn-refresh" onclick="loadAll()">🔄 立即同步</button>
+    <span id="refresh-time">—</span>
+    <button class="btn-sync" onclick="loadAll()">🔄 立即同步</button>
   </div>
 </div>
 
 <div class="content">
-  <div class="stats-row">
-    <div class="stat-card teal" onclick="scrollToSec('sec-today')"><div class="stat-num" id="stat-today">—</div><div class="stat-label">今日新報名</div><div class="stat-sub">尚未建立帳號</div></div>
-    <div class="stat-card amber" onclick="scrollToSec('sec-pending')"><div class="stat-num" id="stat-pending">—</div><div class="stat-label">全部待建檔</div><div class="stat-sub">已填表但未建帳號</div></div>
 
+  <!-- 錯誤提示 -->
+  <div class="error-box" id="error-box">
+    <div class="error-title">⚠️ 無法載入資料</div>
+    <div class="error-msg" id="error-msg"></div>
   </div>
 
+  <!-- 統計 -->
+  <div class="stats-row">
+    <div class="stat-card teal" onclick="scrollToSec('sec-today')">
+      <div class="stat-num" id="stat-today">—</div>
+      <div class="stat-label">今日新報名</div>
+      <div class="stat-sub">尚未建立帳號</div>
+    </div>
+    <div class="stat-card amber" onclick="scrollToSec('sec-pending')">
+      <div class="stat-num" id="stat-pending">—</div>
+      <div class="stat-label">全部待建檔</div>
+      <div class="stat-sub">已填表但未建帳號</div>
+    </div>
+  </div>
+
+  <!-- 今日新報名 -->
   <div class="section-card" id="sec-today">
     <div class="section-header">
-      <div class="section-title">🆕 今日新報名<span class="badge badge-teal" id="badge-today">0</span></div>
-      <span style="font-size:12px;color:var(--g4)" id="today-date"></span>
+      <div class="section-title">🆕 今日新報名 <span class="badge badge-teal" id="badge-today">0</span></div>
+      <span style="font-size:12px;color:var(--g4)" id="today-label"></span>
     </div>
     <table class="tbl">
-      <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>報名時間</th><th>認領負責人</th><th>操作</th></tr></thead>
-      <tbody id="tbody-today"><tr class="loading-row"><td colspan="6"><span class="spin"></span>從後台同步中…</td></tr></tbody>
+      <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>報名時間</th><th>認領</th><th>操作</th></tr></thead>
+      <tbody id="tbody-today"><tr class="loading-row"><td colspan="6"><span class="spin"></span>載入中…</td></tr></tbody>
     </table>
   </div>
 
+  <!-- 全部待建檔 -->
   <div class="section-card" id="sec-pending">
     <div class="section-header">
-      <div class="section-title">📋 全部待建檔<span class="badge badge-amber" id="badge-pending">0</span></div>
-      <span style="font-size:12px;color:var(--g4)">後台建立學員後自動更新</span>
+      <div class="section-title">📋 全部待建檔 <span class="badge badge-amber" id="badge-pending">0</span></div>
+      <span style="font-size:12px;color:var(--g4)">後台建立後自動更新</span>
     </div>
-    <!-- 篩選工具列 -->
-    <div style="padding:12px 16px;background:var(--g0);border-bottom:1px solid var(--g2);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">排序</span>
-        <select id="filter-sort" onchange="applyFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
-          <option value="new">🕐 最新優先</option>
-          <option value="old">🕑 最舊優先</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">負責人</span>
-        <select id="filter-rd" onchange="applyFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
-          <option value="">全部</option>
-          <option value="tingxuan">亭瑄</option>
-          <option value="chengfang">承芳</option>
-          <option value="yutong">禹彤</option>
-          <option value="shengwei">勝崴</option>
-          <option value="__none__">尚未認領</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:160px;">
-        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">搜尋</span>
-        <input type="text" id="filter-search" oninput="applyFilter()" placeholder="姓名 / 電話 / LINE ID…" style="flex:1;padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;min-width:0;">
-      </div>
-      <button onclick="resetFilter()" style="padding:6px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;background:white;cursor:pointer;color:var(--g5);font-family:inherit;white-space:nowrap;">✕ 清除</button>
-      <span id="filter-count" style="font-size:12px;color:var(--g4);white-space:nowrap"></span>
+    <div class="filter-bar">
+      <span class="filter-label">排序</span>
+      <select id="p-sort" onchange="applyPendingFilter()">
+        <option value="new">🕐 最新優先</option>
+        <option value="old">🕑 最舊優先</option>
+      </select>
+      <span class="filter-label">負責人</span>
+      <select id="p-rd" onchange="applyPendingFilter()">
+        <option value="">全部</option>
+        <option value="tingxuan">亭瑄</option>
+        <option value="chengfang">承芳</option>
+        <option value="yutong">禹彤</option>
+        <option value="shengwei">勝崴</option>
+        <option value="__none__">尚未認領</option>
+      </select>
+      <input id="p-search" type="text" placeholder="搜尋姓名/電話/LINE…" oninput="applyPendingFilter()" style="width:160px;">
+      <button class="btn-clear" onclick="resetPendingFilter()">✕ 清除</button>
+      <span class="filter-count" id="p-count"></span>
     </div>
     <table class="tbl">
       <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>報名時間</th><th>等待</th><th>認領負責人</th><th>操作</th></tr></thead>
-      <tbody id="tbody-pending"><tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr></tbody>
+      <tbody id="tbody-pending"><tr class="loading-row"><td colspan="7"><span class="spin"></span>載入中…</td></tr></tbody>
     </table>
   </div>
 
-  <!-- ✅ 已建立帳號 -->
+  <!-- 已建立帳號 -->
   <div class="section-card" id="sec-done">
     <div class="section-header">
-      <div class="section-title">
-        ✅ 已建立帳號
-        <span class="badge" style="background:var(--green-light);color:#166534" id="badge-done">0</span>
-        <span style="font-size:11px;font-weight:400;color:var(--g4)">後台建立後自動出現</span>
-      </div>
-      <span style="font-size:12px;color:var(--g4)">已完成建檔的學員</span>
+      <div class="section-title">✅ 已建立帳號 <span class="badge badge-green" id="badge-done">0</span> <span style="font-size:11px;font-weight:400;color:var(--g4)">後台建立後自動出現</span></div>
     </div>
-    <!-- 篩選工具列 -->
-    <div style="padding:12px 16px;background:var(--g0);border-bottom:1px solid var(--g2);display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">排序</span>
-        <select id="done-sort" onchange="applyDoneFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
-          <option value="new">🕐 最新優先</option>
-          <option value="old">🕑 最舊優先</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">負責人</span>
-        <select id="done-rd" onchange="applyDoneFilter()" style="padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:white;cursor:pointer;">
-          <option value="">全部</option>
-          <option value="tingxuan">亭瑄</option>
-          <option value="chengfang">承芳</option>
-          <option value="yutong">禹彤</option>
-          <option value="shengwei">勝崴</option>
-          <option value="__none__">未指定</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:160px;">
-        <span style="font-size:12px;font-weight:600;color:var(--g5);white-space:nowrap">搜尋</span>
-        <input type="text" id="done-search" oninput="applyDoneFilter()" placeholder="姓名 / 電話 / LINE ID…" style="flex:1;padding:6px 10px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;font-family:inherit;outline:none;min-width:0;">
-      </div>
-      <button onclick="resetDoneFilter()" style="padding:6px 12px;border:1.5px solid var(--g2);border-radius:8px;font-size:12px;background:white;cursor:pointer;color:var(--g5);font-family:inherit;white-space:nowrap;">✕ 清除</button>
-      <span id="done-count" style="font-size:12px;color:var(--g4);white-space:nowrap"></span>
+    <div class="filter-bar">
+      <span class="filter-label">排序</span>
+      <select id="d-sort" onchange="applyDoneFilter()">
+        <option value="new">🕐 最新優先</option>
+        <option value="old">🕑 最舊優先</option>
+      </select>
+      <span class="filter-label">負責人</span>
+      <select id="d-rd" onchange="applyDoneFilter()">
+        <option value="">全部</option>
+        <option value="tingxuan">亭瑄</option>
+        <option value="chengfang">承芳</option>
+        <option value="yutong">禹彤</option>
+        <option value="shengwei">勝崴</option>
+        <option value="__none__">未指定</option>
+      </select>
+      <input id="d-search" type="text" placeholder="搜尋姓名/電話/LINE…" oninput="applyDoneFilter()" style="width:160px;">
+      <button class="btn-clear" onclick="resetDoneFilter()">✕ 清除</button>
+      <span class="filter-count" id="d-count"></span>
     </div>
-    <div id="done-body" style="display:block">
-      <table class="tbl">
-        <thead><tr><th>姓名</th><th>電話</th><th>負責營養師</th><th>報名時間</th><th>操作</th></tr></thead>
-        <tbody id="tbody-done"><tr class="loading-row"><td colspan="5"><span class="spin"></span>從後台同步中…</td></tr></tbody>
-      </table>
-    </div>
+    <table class="tbl">
+      <thead><tr><th>姓名</th><th>電話</th><th>LINE ID</th><th>負責營養師</th><th>報名時間</th><th>操作</th></tr></thead>
+      <tbody id="tbody-done"><tr class="loading-row"><td colspan="6"><span class="spin"></span>載入中…</td></tr></tbody>
+    </table>
   </div>
 
-</div>
+</div><!-- /content -->
 
+<!-- 建立帳號 Modal -->
 <div class="modal-overlay" id="modal-create">
   <div class="modal">
     <div class="modal-header">
@@ -218,37 +263,37 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="notice blue">💡 <strong>也可直接去後台建立</strong>，後台建立完成後儀表板會自動同步並顯示負責人。</div>
-      <div class="notice teal">📋 以下資料從報名表單自動帶入，確認後設定課程資訊即可建立。</div>
-      <div style="font-size:12px;font-weight:700;color:var(--g5);margin-bottom:8px">報名表單資料預覽</div>
-      <div class="intake-grid" id="modal-intake-preview"></div>
-      <div style="font-size:12px;font-weight:700;color:var(--g5);margin-bottom:10px">帳號與課程設定</div>
+      <div class="notice blue">💡 <strong>也可直接去後台建立</strong>，建立後儀表板自動同步顯示負責人。</div>
+      <div class="notice teal">📋 報名資料已自動帶入，確認後設定課程即可。</div>
+      <div style="font-size:11px;font-weight:700;color:var(--g5);margin-bottom:7px;letter-spacing:0.3px">報名表單資料</div>
+      <div class="intake-preview" id="modal-preview"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--g5);margin-bottom:9px;letter-spacing:0.3px">帳號與課程設定</div>
       <div class="fld-row">
-        <div class="fld"><label>學員姓名 *</label><input type="text" id="new-name" placeholder="姓名"></div>
-        <div class="fld"><label>手機號碼（帳號）</label><input type="tel" id="new-phone" readonly style="background:var(--g1);cursor:not-allowed"></div>
+        <div class="fld"><label>學員姓名 *</label><input type="text" id="m-name" placeholder="姓名"></div>
+        <div class="fld"><label>手機號碼（帳號）</label><input type="tel" id="m-phone" readonly style="background:var(--g1);cursor:not-allowed;"></div>
       </div>
       <div class="fld-row">
-        <div class="fld"><label>App 密碼 *</label><input type="text" id="new-pw" value="codare123"></div>
-        <div class="fld"><label>課程期別</label><input type="number" id="new-period" value="1" min="1"></div>
+        <div class="fld"><label>App 密碼 *</label><input type="text" id="m-pw" value="codare123"></div>
+        <div class="fld"><label>課程期別</label><input type="number" id="m-period" value="1" min="1"></div>
       </div>
       <div class="fld-row">
-        <div class="fld"><label>課程開始日期</label><input type="date" id="new-start"></div>
-        <div class="fld"><label>課程結束日期</label><input type="date" id="new-end"></div>
+        <div class="fld"><label>課程開始日期</label><input type="date" id="m-start"></div>
+        <div class="fld"><label>課程結束日期</label><input type="date" id="m-end"></div>
       </div>
       <div class="fld">
         <label>負責營養師 *</label>
-        <select id="new-rd">
+        <select id="m-rd">
           <option value="tingxuan">亭瑄營養師</option>
           <option value="chengfang">承芳營養師</option>
           <option value="yutong">禹彤營養師</option>
           <option value="shengwei">勝崴營養師</option>
         </select>
       </div>
-      <div class="fld"><label>本期目標</label><input type="text" id="new-goal" placeholder="例：減重 5kg，改善飲食習慣"></div>
+      <div class="fld"><label>本期目標</label><input type="text" id="m-goal" placeholder="例：減重 5kg，改善飲食習慣"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal()">取消</button>
-      <button class="btn btn-teal" onclick="createStudent()" id="create-btn">✅ 建立學員帳號</button>
+      <button class="btn btn-teal" onclick="createStudent()" id="m-create-btn">✅ 建立學員帳號</button>
     </div>
   </div>
 </div>
@@ -256,316 +301,394 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);
 <div class="toast" id="toast"></div>
 
 <script>
-const SB_URL='https://iqfnbwyjehwdbxptquyr.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxZm5id3lqZWh3ZGJ4cHRxdXlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3ODU5MjcsImV4cCI6MjA5MjM2MTkyN30.F5XSv6TKkJfek8bLmYsgvYgD7cnLGLirpNwC7SqbNDY';
-const H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'};
-const RD={'tingxuan':'亭瑄營養師','chengfang':'承芳營養師','yutong':'禹彤營養師','shengwei':'勝崴營養師'};
-let currentPhone=null;
+// ══ Supabase 設定（與後台相同）══
+const SB_URL = 'https://iqfnbwyjehwdbxptquyr.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxZm5id3lqZWh3ZGJ4cHRxdXlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3ODU5MjcsImV4cCI6MjA5MjM2MTkyN30.F5XSv6TKkJfek8bLmYsgvYgD7cnLGLirpNwC7SqbNDY';
+const SB_HDRS = {
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Content-Type': 'application/json',
+  'Prefer': 'resolution=merge-duplicates'
+};
+const GET_HDRS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
 
-async function sbGet(k){const r=await fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent(k)}&select=value`,{headers:H});if(!r.ok)return null;const d=await r.json();return d[0]?.value??null;}
-async function sbWrite(k,v){await fetch(`${SB_URL}/rest/v1/cd`,{method:'POST',headers:H,body:JSON.stringify({key:k,value:v,updated_at:new Date().toISOString()})});}
-async function sbList(prefix){const r=await fetch(`${SB_URL}/rest/v1/cd?key=ilike.${encodeURIComponent(prefix+'%')}&select=key,value&order=updated_at.desc&limit=500`,{headers:H});if(!r.ok)return[];return await r.json();}
-function daysDiff(s){if(!s)return 0;return Math.floor((Date.now()-new Date(s).getTime())/86400000);}
-function fmtTime(s){if(!s)return'—';const d=new Date(s);return d.toLocaleDateString('zh-TW')+' '+d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});}
-function isToday(s){if(!s)return false;const d=new Date(s),n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}
+const RD = { tingxuan:'亭瑄營養師', chengfang:'承芳營養師', yutong:'禹彤營養師', shengwei:'勝崴營養師' };
 
-async function loadAll(){
-  document.getElementById('last-refresh').textContent='同步中…';
-  setLoading();
-  try{
-    const[pRows,iRows,dRows]=await Promise.all([sbList('pending_'),sbList('intake_'),sbList('dynuser_')]);
-    const iMap={};iRows.forEach(r=>{iMap[r.key.replace('intake_','')]=r.value;});
-    const dMap={};dRows.forEach(r=>{dMap[r.key.replace('dynuser_','')]=r.value;});
-    const signups=pRows.filter(r=>r.value).map(r=>{
-      const phone=r.key.replace('pending_','');
-      const intake=iMap[phone]||{};
-      const dyn=dMap[phone];
-      const isCreated=!!dyn;
-      const rdId=dyn?.rd||r.value?.claimedBy||null;
-      return{phone,name:intake.name||r.value.name||'未知',lineId:intake.lineId||r.value.lineId||'—',submittedAt:intake.submittedAt||r.value.submittedAt||null,isCreated,rdId,rdName:rdId?(RD[rdId]||rdId):null,intake,claimedBy:r.value.claimedBy||null};
-    }).sort((a,b)=>new Date(b.submittedAt)-new Date(a.submittedAt));
+// ══ State ══
+let _pendingAll = [];
+let _doneAll    = [];
+let _currentPhone = null;
 
-    // ── 自動清除：pending_ 有但 dynuser_ 不見了（後台已刪除）→ 從儀表板移除 ──
-    const orphaned = signups.filter(r => {
-      const pVal = pRows.find(x => x.key === 'pending_' + r.phone)?.value;
-      // 如果曾經建立過（claimedBy 有值或 doneBy 有值）但現在 dynuser_ 不見了
-      return !r.isCreated && (pVal?.doneBy || pVal?.claimedBy);
-    });
-    if (orphaned.length > 0) {
-      // 靜默清除孤立的 pending_（後台刪除學員造成的）
-      orphaned.forEach(async r => {
-        await Promise.all([
-          fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent('pending_'+r.phone)}`, { method:'DELETE', headers:H }),
-          fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent('intake_'+r.phone)}`,  { method:'DELETE', headers:H }),
-        ]).catch(()=>{});
-      });
-    }
-    const pending=signups.filter(r=>!r.isCreated);
-    const done=signups.filter(r=>r.isCreated);
-    const today=pending.filter(r=>isToday(r.submittedAt));
-    [['today',today],['pending',pending]].forEach(([id,list])=>{
-      document.getElementById('stat-'+id).textContent=list.length;
-      document.getElementById('badge-'+id).textContent=list.length;
-    });
-    document.getElementById('badge-done').textContent=done.length;
-    document.getElementById('today-date').textContent=new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
-    _pendingAll = pending;
-    _doneAll = done;
-    renderTable('tbody-today',today,false);
-    applyFilter();
-    applyDoneFilter();
-  }catch(e){console.error(e);toast('⚠️ 同步失敗：'+e.message);}
-  document.getElementById('last-refresh').textContent='最後同步：'+new Date().toLocaleTimeString('zh-TW');
+// ══ Supabase Helpers ══
+async function sbGet(key) {
+  const r = await fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent(key)}&select=value`, { headers: GET_HDRS });
+  if (!r.ok) return null;
+  const rows = await r.json();
+  return rows[0]?.value ?? null;
 }
 
-function setLoading(){['today','pending'].forEach(id=>{const el=document.getElementById('tbody-'+id);if(el)el.innerHTML='<tr class="loading-row"><td colspan="7"><span class="spin"></span>從後台同步中…</td></tr>';});}
+async function sbList(prefix) {
+  const r = await fetch(
+    `${SB_URL}/rest/v1/cd?key=ilike.${encodeURIComponent(prefix + '%')}&select=key,value&order=updated_at.desc&limit=500`,
+    { headers: GET_HDRS }
+  );
+  if (!r.ok) throw new Error(`Supabase 查詢失敗 (${r.status}): ${r.statusText}`);
+  return await r.json();
+}
 
-function renderTable(id,list,showDays){
-  const tb=document.getElementById(id);
-  const cols=showDays?7:6;
-  if(!list.length){tb.innerHTML=`<tr><td colspan="${cols}"><div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">目前沒有資料</div></div></td></tr>`;return;}
-  tb.innerHTML=list.map(r=>{
-    const days=daysDiff(r.submittedAt);
-    let daysTd='';
-    if(showDays){
-      const[color,bg]=days>=7?['#8b5cf6','#ede9fe']:days>=3?['var(--red)','var(--red-light)']:['#92400e','var(--amber-light)'];
-      daysTd=`<td><span class="chip" style="background:${bg};color:${color}">${days===0?'今天':days+' 天'}</span></td>`;
-    }
-    // 認領欄：已認領就顯示名字，否則顯示下拉
-    const claimTd=r.claimedBy
-      ?`<td><span class="chip" style="background:#e0f2fe;color:#075985">👩‍⚕️ ${RD[r.claimedBy]||r.claimedBy}<button onclick="unclaim('${r.phone}')" style="margin-left:5px;background:none;border:none;cursor:pointer;font-size:10px;color:#94a3b8">✕</button></span></td>`
-      :`<td><select class="claim-select" onchange="claimCase('${r.phone}',this.value);this.value=''" title="認領此案"><option value="">選擇負責人…</option><option value="tingxuan">亭瑄</option><option value="chengfang">承芳</option><option value="yutong">禹彤</option><option value="shengwei">勝崴</option></select></td>`;
-    return`<tr>
+async function sbWrite(key, val) {
+  const r = await fetch(`${SB_URL}/rest/v1/cd`, {
+    method: 'POST', headers: SB_HDRS,
+    body: JSON.stringify({ key, value: val, updated_at: new Date().toISOString() })
+  });
+  if (!r.ok) throw new Error(`寫入失敗 (${r.status})`);
+}
+
+async function sbDelete(key) {
+  await fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent(key)}`, { method: 'DELETE', headers: SB_HDRS });
+}
+
+// ══ Helpers ══
+function daysDiff(s) { return s ? Math.floor((Date.now() - new Date(s).getTime()) / 86400000) : 0; }
+function fmtTime(s) {
+  if (!s) return '—';
+  return new Date(s).toLocaleDateString('zh-TW') + ' ' + new Date(s).toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' });
+}
+function isToday(s) {
+  if (!s) return false;
+  const d = new Date(s), n = new Date();
+  return d.getFullYear()===n.getFullYear() && d.getMonth()===n.getMonth() && d.getDate()===n.getDate();
+}
+function setSyncState(loading) {
+  const dot = document.getElementById('sync-dot');
+  dot.classList.toggle('loading', loading);
+}
+
+// ══ Main Load ══
+async function loadAll() {
+  setSyncState(true);
+  document.getElementById('refresh-time').textContent = '同步中…';
+  hideError();
+
+  try {
+    // 同時抓 pending_ / intake_ / dynuser_
+    const [pRows, iRows, dRows] = await Promise.all([
+      sbList('pending_'),
+      sbList('intake_'),
+      sbList('dynuser_')
+    ]);
+
+    // 建立 map
+    const iMap = {};
+    iRows.forEach(r => { iMap[r.key.replace('intake_', '')] = r.value; });
+    const dMap = {};
+    dRows.forEach(r => { dMap[r.key.replace('dynuser_', '')] = r.value; });
+
+    // 整理報名資料
+    const all = pRows.filter(r => r.value).map(r => {
+      const phone   = r.key.replace('pending_', '');
+      const intake  = iMap[phone] || {};
+      const dyn     = dMap[phone];
+      const isCreated = !!dyn;
+      const rdId    = dyn?.rd || r.value?.claimedBy || null;
+      return {
+        phone,
+        name:        intake.name || r.value.name || '未知',
+        lineId:      intake.lineId || r.value.lineId || '—',
+        submittedAt: intake.submittedAt || r.value.submittedAt || null,
+        isCreated,
+        rdId,
+        rdName:      rdId ? (RD[rdId] || rdId) : null,
+        claimedBy:   r.value.claimedBy || null,
+        intake
+      };
+    }).sort((a, b) => new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0));
+
+    _pendingAll = all.filter(r => !r.isCreated);
+    _doneAll    = all.filter(r => r.isCreated);
+
+    const todayList = _pendingAll.filter(r => isToday(r.submittedAt));
+
+    // 更新統計
+    document.getElementById('stat-today').textContent   = todayList.length;
+    document.getElementById('stat-pending').textContent = _pendingAll.length;
+    document.getElementById('badge-today').textContent   = todayList.length;
+    document.getElementById('badge-pending').textContent = _pendingAll.length;
+    document.getElementById('badge-done').textContent    = _doneAll.length;
+    document.getElementById('today-label').textContent   = new Date().toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+
+    renderTodayTable(todayList);
+    applyPendingFilter();
+    applyDoneFilter();
+
+  } catch(e) {
+    showError(e.message);
+  }
+
+  setSyncState(false);
+  document.getElementById('refresh-time').textContent = '同步：' + new Date().toLocaleTimeString('zh-TW');
+}
+
+// ══ Error ══
+function showError(msg) {
+  const box = document.getElementById('error-box');
+  document.getElementById('error-msg').innerHTML =
+    `錯誤訊息：<strong>${msg}</strong><br><br>` +
+    `可能原因：<br>` +
+    `1. 尚無任何報名資料（pending_ / intake_ 尚未寫入）<br>` +
+    `2. 網路連線問題<br>` +
+    `3. Supabase RLS 政策限制<br><br>` +
+    `請先確認有人填過報名表單，再重新整理。`;
+  box.classList.add('show');
+}
+function hideError() { document.getElementById('error-box').classList.remove('show'); }
+
+// ══ Render Tables ══
+function renderTodayTable(list) {
+  const tb = document.getElementById('tbody-today');
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">今天尚無新報名</div></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = list.map(r => `
+    <tr>
       <td><strong>${r.name}</strong></td>
-      <td style="font-family:monospace;font-size:13px;color:var(--g5)">${r.phone}</td>
-      <td style="font-size:13px;color:var(--g5)">${r.lineId}</td>
-      <td style="font-size:12px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
-      ${daysTd}
-      ${claimTd}
-      <td><div style="display:flex;gap:5px;flex-wrap:wrap">
-        <button class="btn btn-teal btn-sm" onclick="openModal('${r.phone}')">👤 建立帳號</button>
-        <button class="btn btn-outline btn-sm" onclick="viewIntake('${r.phone}')">📋 建檔資料</button>
+      <td style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
+      <td style="font-size:12px;color:var(--g5)">${r.lineId}</td>
+      <td style="font-size:11px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
+      <td>${renderClaimCell(r)}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-teal" onclick="openModal('${r.phone}')">👤 建立</button>
+        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderPendingTable(list) {
+  const tb = document.getElementById('tbody-pending');
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">✅</div><div class="empty-text">目前沒有待建檔資料</div></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = list.map(r => {
+    const days = daysDiff(r.submittedAt);
+    const [bg, color] = days >= 7 ? ['#ede9fe','#7c3aed'] : days >= 3 ? ['#fee2e2','#dc2626'] : ['#fef3c7','#92400e'];
+    const daysBadge = `<span class="chip" style="background:${bg};color:${color}">${days === 0 ? '今天' : days + ' 天'}</span>`;
+    return `<tr>
+      <td><strong>${r.name}</strong></td>
+      <td style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
+      <td style="font-size:12px;color:var(--g5)">${r.lineId}</td>
+      <td style="font-size:11px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
+      <td>${daysBadge}</td>
+      <td>${renderClaimCell(r)}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-teal" onclick="openModal('${r.phone}')">👤 建立</button>
+        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋</button>
       </div></td>
     </tr>`;
   }).join('');
 }
 
-function renderDone(list){
-  const tb=document.getElementById('tbody-done');
-  if(!list.length){tb.innerHTML='<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">尚無已建立帳號紀錄</div></div></td></tr>';return;}
-  tb.innerHTML=list.map(r=>`
+function renderDoneTable(list) {
+  const tb = document.getElementById('tbody-done');
+  if (!list.length) {
+    tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">尚無已建立帳號紀錄</div></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = list.map(r => `
     <tr>
       <td><strong>${r.name}</strong></td>
-      <td style="font-family:monospace;font-size:13px;color:var(--g5)">${r.phone}</td>
-      <td>${r.rdName?`<span class="rd-tag">👩‍⚕️ ${r.rdName}</span>`:'<span style="color:var(--g4);font-size:12px">—</span>'}</td>
-      <td style="font-size:12px;color:var(--g5)">${fmtTime(r.submittedAt)}</td>
-      <td style="display:flex;gap:5px;flex-wrap:wrap">
-        <button class="btn btn-outline btn-sm" onclick="viewIntake('${r.phone}')">📋 建檔資料</button>
-        <button class="btn btn-sm" style="background:#fee2e2;color:#ef4444;border:1.5px solid #fca5a5;" onclick="removeFromDashboard('${r.phone}','${r.name}')">🗑️ 移除</button>
-      </td>
+      <td style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
+      <td style="font-size:12px;color:var(--g5)">${r.lineId}</td>
+      <td>${r.rdName ? `<span class="chip chip-rd">👩‍⚕️ ${r.rdName}</span>` : '<span style="color:var(--g4);font-size:11px">—</span>'}</td>
+      <td style="font-size:11px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋 建檔資料</button>
+        <button class="btn btn-red" onclick="removeRecord('${r.phone}','${r.name}')">🗑️</button>
+      </div></td>
     </tr>`).join('');
 }
 
-async function claimCase(phone,rdId){
-  if(!rdId)return;
-  const p=await sbGet('pending_'+phone)||{};
-  await sbWrite('pending_'+phone,{...p,claimedBy:rdId,claimedAt:new Date().toISOString()});
-  toast('✅ '+RD[rdId]+' 認領了 '+phone);
-  setTimeout(loadAll,600);
-}
-async function unclaim(phone){
-  const p=await sbGet('pending_'+phone)||{};
-  delete p.claimedBy;delete p.claimedAt;
-  await sbWrite('pending_'+phone,p);
-  toast('↩ 已取消認領');setTimeout(loadAll,600);
-}
-
-async function openModal(phone){
-  currentPhone=phone;
-  const intake=await sbGet('intake_'+phone)||{};
-  document.getElementById('new-name').value=intake.name||'';
-  document.getElementById('new-phone').value=phone;
-  document.getElementById('new-pw').value='codare123';
-  document.getElementById('new-period').value=1;
-  document.getElementById('new-goal').value=intake.goalWeight?`目標體重 ${intake.goalWeight}kg`:'';
-  const today=new Date(),end=new Date(today);end.setDate(end.getDate()+27);
-  document.getElementById('new-start').value=today.toISOString().slice(0,10);
-  document.getElementById('new-end').value=end.toISOString().slice(0,10);
-  const fields=[['姓名',intake.name],['性別',intake.gender],['年紀',intake.age?intake.age+'歲':null],['身高',intake.height?intake.height+'cm':null],['體重',intake.weight?intake.weight+'kg':null],['體脂率',intake.bodyFat?intake.bodyFat+'%':null],['目標體重',intake.goalWeight?intake.goalWeight+'kg':null],['LINE ID',intake.lineId],['電話',phone]];
-  document.getElementById('modal-intake-preview').innerHTML=fields.map(([k,v])=>`<div class="intake-item"><span class="intake-key">${k}</span><span class="intake-val">${v||'—'}</span></div>`).join('');
-  document.getElementById('modal-create').classList.add('open');
-}
-function closeModal(){document.getElementById('modal-create').classList.remove('open');currentPhone=null;}
-
-async function createStudent(){
-  const btn=document.getElementById('create-btn');
-  const name=document.getElementById('new-name').value.trim();
-  const phone=document.getElementById('new-phone').value.trim();
-  const pw=document.getElementById('new-pw').value.trim();
-  const period=parseInt(document.getElementById('new-period').value)||1;
-  const start=document.getElementById('new-start').value.replace(/-/g,'/');
-  const end=document.getElementById('new-end').value.replace(/-/g,'/');
-  const rd=document.getElementById('new-rd').value;
-  const goal=document.getElementById('new-goal').value.trim();
-  if(!name||!phone||!pw){toast('請填寫姓名和密碼');return;}
-  btn.disabled=true;btn.textContent='建立中…';
-  try{
-    await sbWrite('dynuser_'+phone,{name,phone,password:pw,period,start,end,goal:goal||'',rd,week:1,status:'active',currentWeek:1});
-    const rdList=await sbGet('rd_students_'+rd)||[];
-    if(!rdList.includes(phone)){rdList.push(phone);await sbWrite('rd_students_'+rd,rdList);}
-    closeModal();
-    toast('✅「'+name+'」帳號建立完成！負責：'+RD[rd]);
-    setTimeout(loadAll,800);
-  }catch(e){toast('⚠️ 建立失敗：'+e.message);btn.disabled=false;btn.textContent='✅ 建立學員帳號';}
+function renderClaimCell(r) {
+  if (r.claimedBy) {
+    return `<span class="chip chip-rd">👩‍⚕️ ${RD[r.claimedBy] || r.claimedBy}
+      <button onclick="unclaim('${r.phone}')" style="margin-left:3px;background:none;border:none;cursor:pointer;font-size:10px;color:var(--g4);">✕</button>
+    </span>`;
+  }
+  return `<select class="claim-select" onchange="claimCase('${r.phone}',this.value);this.value=''">
+    <option value="">認領…</option>
+    <option value="tingxuan">亭瑄</option>
+    <option value="chengfang">承芳</option>
+    <option value="yutong">禹彤</option>
+    <option value="shengwei">勝崴</option>
+  </select>`;
 }
 
-async function viewIntake(phone){
-  const intake=await sbGet('intake_'+phone);
-  if(!intake){toast('找不到建檔資料');return;}
-  const fields=[['姓名',intake.name],['性別',intake.gender],['年紀',intake.age?intake.age+'歲':null],['身高',intake.height?intake.height+'cm':null],['體重',intake.weight?intake.weight+'kg':null],['體脂率',intake.bodyFat?intake.bodyFat+'%':null],['LINE ID',intake.lineId],['電話',phone],['目標體重',intake.goalWeight?intake.goalWeight+'kg':null],['目標體脂',intake.goalFat?intake.goalFat+'%':null],['預期時間',intake.goalDeadline],['主要困擾',intake.painPoint],['慢性疾病',intake.disease],['藥物保健品',intake.medication],['飲食偏好',intake.dietPref],['飲食禁忌',intake.dietTaboo],['食物過敏',intake.foodAllergy],['運動頻率',intake.exerciseFreq],['運動種類',intake.exerciseTypes],['每日飲水',intake.water?intake.water+'ml':null],['睡眠時數',intake.sleep?intake.sleep+'小時':null],['平日三餐',intake.weekdayMeal],['假日三餐',intake.weekendMeal]];
-  const w=window.open('','_blank','width=660,height=720,scrollbars=yes');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${intake.name||phone} 建檔資料</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"><style>body{font-family:'Noto Sans TC',sans-serif;padding:24px;background:#f8fafc;color:#1e293b}h2{margin-bottom:16px;color:#0f766e}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.item{background:white;padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0}.k{font-size:11px;color:#94a3b8;margin-bottom:3px}.v{font-size:13px;font-weight:500;word-break:break-all}.empty{color:#cbd5e1}</style></head><body><h2>📋 ${intake.name||phone} — 完整建檔資料</h2><div class="grid">${fields.map(([k,v])=>`<div class="item"><div class="k">${k}</div><div class="v ${v?'':'empty'}">${v||'—'}</div></div>`).join('')}</div></body></html>`);
-}
-
-function toggleDone(){const b=document.getElementById('done-body'),i=document.getElementById('done-icon'),o=b.style.display!=='none';b.style.display=o?'none':'block';i.textContent=o?'▸':'▾';}
-function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
-document.getElementById('modal-create').addEventListener('click',function(e){if(e.target===this)closeModal();});
-
-loadAll();
-setInterval(loadAll,3*60*1000);
-
-// 篩選欄位 focus 樣式
-['filter-sort','filter-rd','filter-search','done-sort','done-rd','done-search'].forEach(id => {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.addEventListener('focus', () => el.style.borderColor = 'var(--teal)');
-  el.addEventListener('blur',  () => el.style.borderColor = 'var(--g2)');
-});
-
-// ── 全部待建檔篩選 ──
-let _pendingAll = []; // 儲存原始 pending 清單供篩選用
-
-function applyFilter() {
-  const sort   = document.getElementById('filter-sort')?.value || 'new';
-  const rdFilter = document.getElementById('filter-rd')?.value || '';
-  const search = (document.getElementById('filter-search')?.value || '').trim().toLowerCase();
-
+// ══ Filters ══
+function applyPendingFilter() {
+  const sort   = document.getElementById('p-sort')?.value || 'new';
+  const rdF    = document.getElementById('p-rd')?.value || '';
+  const search = (document.getElementById('p-search')?.value || '').trim().toLowerCase();
   let list = [..._pendingAll];
-
-  // 篩選負責人
-  if (rdFilter === '__none__') {
-    list = list.filter(r => !r.claimedBy);
-  } else if (rdFilter) {
-    list = list.filter(r => r.claimedBy === rdFilter);
-  }
-
-  // 搜尋姓名 / 電話 / LINE ID
-  if (search) {
-    list = list.filter(r =>
-      r.name.toLowerCase().includes(search) ||
-      r.phone.includes(search) ||
-      r.lineId.toLowerCase().includes(search)
-    );
-  }
-
-  // 排序
-  list.sort((a, b) => {
-    const ta = new Date(a.submittedAt || 0).getTime();
-    const tb = new Date(b.submittedAt || 0).getTime();
-    return sort === 'old' ? ta - tb : tb - ta;
-  });
-
-  // 更新計數提示
-  const countEl = document.getElementById('filter-count');
-  if (countEl) {
-    const isFiltered = rdFilter || search;
-    countEl.textContent = isFiltered ? `顯示 ${list.length} / ${_pendingAll.length} 筆` : `共 ${_pendingAll.length} 筆`;
-  }
-
-  renderTable('tbody-pending', list, true);
+  if (rdF === '__none__') list = list.filter(r => !r.claimedBy);
+  else if (rdF) list = list.filter(r => r.claimedBy === rdF);
+  if (search) list = list.filter(r => r.name.toLowerCase().includes(search) || r.phone.includes(search) || r.lineId.toLowerCase().includes(search));
+  list.sort((a, b) => sort === 'old' ? new Date(a.submittedAt||0) - new Date(b.submittedAt||0) : new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
+  const el = document.getElementById('p-count');
+  if (el) el.textContent = (rdF || search) ? `顯示 ${list.length} / ${_pendingAll.length} 筆` : `共 ${_pendingAll.length} 筆`;
+  renderPendingTable(list);
 }
-
-function resetFilter() {
-  const s = document.getElementById('filter-sort');
-  const r = document.getElementById('filter-rd');
-  const q = document.getElementById('filter-search');
-  if (s) s.value = 'new';
-  if (r) r.value = '';
-  if (q) q.value = '';
-  applyFilter();
+function resetPendingFilter() {
+  ['p-sort','p-rd','p-search'].forEach(id => { const el=document.getElementById(id); if(el) el.value = id==='p-sort'?'new':''; });
+  applyPendingFilter();
 }
-
-// ── 已建立帳號篩選 ──
-let _doneAll = [];
 
 function applyDoneFilter() {
-  const sort   = document.getElementById('done-sort')?.value || 'new';
-  const rdFilter = document.getElementById('done-rd')?.value || '';
-  const search = (document.getElementById('done-search')?.value || '').trim().toLowerCase();
-
+  const sort   = document.getElementById('d-sort')?.value || 'new';
+  const rdF    = document.getElementById('d-rd')?.value || '';
+  const search = (document.getElementById('d-search')?.value || '').trim().toLowerCase();
   let list = [..._doneAll];
-
-  // 篩選負責人
-  if (rdFilter === '__none__') {
-    list = list.filter(r => !r.rdId);
-  } else if (rdFilter) {
-    list = list.filter(r => r.rdId === rdFilter);
-  }
-
-  // 搜尋姓名 / 電話 / LINE ID
-  if (search) {
-    list = list.filter(r =>
-      r.name.toLowerCase().includes(search) ||
-      r.phone.includes(search) ||
-      (r.lineId || '').toLowerCase().includes(search)
-    );
-  }
-
-  // 排序
-  list.sort((a, b) => {
-    const ta = new Date(a.submittedAt || 0).getTime();
-    const tb = new Date(b.submittedAt || 0).getTime();
-    return sort === 'old' ? ta - tb : tb - ta;
-  });
-
-  // 更新計數
-  const countEl = document.getElementById('done-count');
-  if (countEl) {
-    const isFiltered = rdFilter || search;
-    countEl.textContent = isFiltered ? `顯示 ${list.length} / ${_doneAll.length} 筆` : `共 ${_doneAll.length} 筆`;
-  }
-
-  renderDone(list);
+  if (rdF === '__none__') list = list.filter(r => !r.rdId);
+  else if (rdF) list = list.filter(r => r.rdId === rdF);
+  if (search) list = list.filter(r => r.name.toLowerCase().includes(search) || r.phone.includes(search) || r.lineId.toLowerCase().includes(search));
+  list.sort((a, b) => sort === 'old' ? new Date(a.submittedAt||0) - new Date(b.submittedAt||0) : new Date(b.submittedAt||0) - new Date(a.submittedAt||0));
+  const el = document.getElementById('d-count');
+  if (el) el.textContent = (rdF || search) ? `顯示 ${list.length} / ${_doneAll.length} 筆` : `共 ${_doneAll.length} 筆`;
+  renderDoneTable(list);
 }
-
 function resetDoneFilter() {
-  const s = document.getElementById('done-sort');
-  const r = document.getElementById('done-rd');
-  const q = document.getElementById('done-search');
-  if (s) s.value = 'new';
-  if (r) r.value = '';
-  if (q) q.value = '';
+  ['d-sort','d-rd','d-search'].forEach(id => { const el=document.getElementById(id); if(el) el.value = id==='d-sort'?'new':''; });
   applyDoneFilter();
 }
 
-// ── 從儀表板移除（後台已刪除學員後手動清除 pending_ / intake_）──
-async function removeFromDashboard(phone, name) {
-  if (!confirm(`確定要從儀表板移除「${name}」嗎？
-
-（此操作會清除報名紀錄，通常在後台刪除學員後使用）`)) return;
+// ══ Claim ══
+async function claimCase(phone, rdId) {
+  if (!rdId) return;
   try {
-    // 刪除 pending_ 和 intake_（dynuser_ 後台已刪）
+    const p = await sbGet('pending_' + phone) || {};
+    await sbWrite('pending_' + phone, { ...p, claimedBy: rdId, claimedAt: new Date().toISOString() });
+    toast(`✅ ${RD[rdId]} 認領了 ${phone}`);
+    setTimeout(loadAll, 600);
+  } catch(e) { toast('⚠️ 認領失敗：' + e.message); }
+}
+async function unclaim(phone) {
+  try {
+    const p = await sbGet('pending_' + phone) || {};
+    delete p.claimedBy; delete p.claimedAt;
+    await sbWrite('pending_' + phone, p);
+    toast('↩ 已取消認領');
+    setTimeout(loadAll, 600);
+  } catch(e) { toast('⚠️ 失敗：' + e.message); }
+}
+
+// ══ Create Modal ══
+async function openModal(phone) {
+  _currentPhone = phone;
+  const intake = await sbGet('intake_' + phone) || {};
+  document.getElementById('m-name').value  = intake.name || '';
+  document.getElementById('m-phone').value = phone;
+  document.getElementById('m-pw').value    = 'codare123';
+  document.getElementById('m-period').value = 1;
+  document.getElementById('m-goal').value  = intake.goalWeight ? `目標體重 ${intake.goalWeight}kg` : '';
+  const today = new Date(), end = new Date(today);
+  end.setDate(end.getDate() + 27);
+  document.getElementById('m-start').value = today.toISOString().slice(0,10);
+  document.getElementById('m-end').value   = end.toISOString().slice(0,10);
+  const fields = [
+    ['姓名', intake.name], ['性別', intake.gender], ['年紀', intake.age ? intake.age + '歲' : null],
+    ['身高', intake.height ? intake.height + 'cm' : null], ['體重', intake.weight ? intake.weight + 'kg' : null],
+    ['體脂率', intake.bodyFat ? intake.bodyFat + '%' : null],
+    ['目標體重', intake.goalWeight ? intake.goalWeight + 'kg' : null],
+    ['LINE ID', intake.lineId], ['電話', phone],
+  ];
+  document.getElementById('modal-preview').innerHTML = fields.map(([k,v]) =>
+    `<div class="ip-item"><span class="ip-key">${k}</span><span class="ip-val">${v || '—'}</span></div>`
+  ).join('');
+  document.getElementById('modal-create').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-create').classList.remove('open'); _currentPhone = null; }
+
+async function createStudent() {
+  const btn    = document.getElementById('m-create-btn');
+  const name   = document.getElementById('m-name').value.trim();
+  const phone  = document.getElementById('m-phone').value.trim();
+  const pw     = document.getElementById('m-pw').value.trim();
+  const period = parseInt(document.getElementById('m-period').value) || 1;
+  const start  = document.getElementById('m-start').value.replace(/-/g, '/');
+  const end    = document.getElementById('m-end').value.replace(/-/g, '/');
+  const rd     = document.getElementById('m-rd').value;
+  const goal   = document.getElementById('m-goal').value.trim();
+  if (!name || !phone || !pw) { toast('請填寫姓名和密碼'); return; }
+  btn.disabled = true; btn.textContent = '建立中…';
+  try {
+    await sbWrite('dynuser_' + phone, { name, phone, password: pw, period, start, end, goal: goal||'', rd, week:1, status:'active', currentWeek:1 });
+    const rdList = await sbGet('rd_students_' + rd) || [];
+    if (!rdList.includes(phone)) { rdList.push(phone); await sbWrite('rd_students_' + rd, rdList); }
+    closeModal();
+    toast(`✅「${name}」帳號建立完成！負責：${RD[rd]}`);
+    setTimeout(loadAll, 800);
+  } catch(e) {
+    toast('⚠️ 建立失敗：' + e.message);
+    btn.disabled = false; btn.textContent = '✅ 建立學員帳號';
+  }
+}
+
+// ══ View Intake ══
+async function viewIntake(phone) {
+  const intake = await sbGet('intake_' + phone);
+  if (!intake) { toast('找不到建檔資料（尚未填寫表單或尚未同步）'); return; }
+  const fields = [
+    ['姓名', intake.name], ['性別', intake.gender], ['年紀', intake.age ? intake.age + '歲' : null],
+    ['身高', intake.height ? intake.height + 'cm' : null], ['體重', intake.weight ? intake.weight + 'kg' : null],
+    ['體脂率', intake.bodyFat ? intake.bodyFat + '%' : null], ['LINE ID', intake.lineId],
+    ['目標體重', intake.goalWeight ? intake.goalWeight + 'kg' : null],
+    ['目標體脂', intake.goalFat ? intake.goalFat + '%' : null], ['預期時間', intake.goalDeadline],
+    ['主要困擾', intake.painPoint], ['慢性疾病', intake.disease], ['藥物保健品', intake.medication],
+    ['飲食偏好', intake.dietPref], ['飲食禁忌', intake.dietTaboo], ['食物過敏', intake.foodAllergy],
+    ['運動頻率', intake.exerciseFreq], ['運動種類', intake.exerciseTypes],
+    ['每日飲水', intake.water ? intake.water + 'ml' : null], ['睡眠時數', intake.sleep ? intake.sleep + '小時' : null],
+    ['平日三餐', intake.weekdayMeal], ['假日三餐', intake.weekendMeal], ['點心習慣', intake.snackContent],
+  ];
+  const w = window.open('', '_blank', 'width=660,height=720,scrollbars=yes');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${intake.name||phone} 建檔資料</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>body{font-family:'Noto Sans TC',sans-serif;padding:24px;background:#f8fafc;color:#1e293b}
+  h2{margin-bottom:16px;color:#0f766e;font-size:18px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .item{background:white;padding:9px 11px;border-radius:8px;border:1px solid #e2e8f0}
+  .k{font-size:10px;color:#94a3b8;margin-bottom:2px}
+  .v{font-size:13px;font-weight:500;word-break:break-all;white-space:pre-wrap}
+  .empty{color:#cbd5e1;font-weight:400}</style></head>
+  <body><h2>📋 ${intake.name||phone} — 完整建檔資料</h2>
+  <div class="grid">${fields.map(([k,v])=>`<div class="item"><div class="k">${k}</div><div class="v ${v?'':'empty'}">${v||'—'}</div></div>`).join('')}
+  </div></body></html>`);
+}
+
+// ══ Remove Record ══
+async function removeRecord(phone, name) {
+  if (!confirm(`確定從儀表板移除「${name}」？\n（通常在後台刪除學員後使用）`)) return;
+  try {
     await Promise.all([
-      fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent('pending_'+phone)}`, { method:'DELETE', headers:H }),
-      fetch(`${SB_URL}/rest/v1/cd?key=eq.${encodeURIComponent('intake_'+phone)}`,  { method:'DELETE', headers:H }),
+      sbDelete('pending_' + phone),
+      sbDelete('intake_'  + phone),
     ]);
     toast(`🗑️「${name}」已從儀表板移除`);
     await loadAll();
-  } catch(e) {
-    toast('⚠️ 移除失敗：' + e.message);
-  }
+  } catch(e) { toast('⚠️ 移除失敗：' + e.message); }
 }
+
+// ══ UI Helpers ══
+function scrollToSec(id) { document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' }); }
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+document.getElementById('modal-create').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+// ══ Init ══
+loadAll();
+setInterval(loadAll, 3 * 60 * 1000); // 每 3 分鐘自動同步
 </script>
 </body>
 </html>
