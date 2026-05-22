@@ -138,10 +138,48 @@ body{font-family:'Noto Sans TC',sans-serif;background:var(--g0);color:var(--g9);
 .toast{position:fixed;bottom:20px;right:20px;background:var(--g9);color:white;padding:11px 18px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transform:translateY(6px);transition:all 0.3s;pointer-events:none;max-width:300px;}
 .toast.show{opacity:1;transform:translateY(0);}
 
-@media(max-width:600px){
-  .stats-row{grid-template-columns:1fr 1fr;}
+/* ── TABLE SCROLL WRAPPER ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+
+@media(max-width:640px){
+  .topbar{padding:0 12px;height:52px;}
+  .topbar-left{font-size:13px;gap:6px;}
+  #refresh-time{display:none;}
+  .content{padding:14px 10px 80px;}
+  .stats-row{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .stat-card{padding:14px;}
+  .stat-num{font-size:26px;}
+  .stat-label{font-size:11px;}
+  .stat-sub{display:none;}
+  .section-header{padding:12px 14px;flex-direction:column;align-items:flex-start;gap:4px;}
+  .filter-bar{padding:10px 12px;gap:6px;}
+  .filter-bar select,.filter-bar input{font-size:11px;padding:5px 7px;}
+  .filter-bar .filter-label{font-size:11px;}
+
+  /* 表格改成卡片式 */
+  .tbl thead{display:none;}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%;}
+  .tbl tr{
+    background:white;border:1px solid var(--g2);border-radius:10px;
+    margin:8px 10px;padding:12px;width:calc(100% - 20px);
+  }
+  .tbl tr:hover td{background:transparent;}
+  .tbl td{border:none;padding:3px 0;font-size:13px;display:flex;align-items:flex-start;gap:6px;}
+  .tbl td:before{
+    content:attr(data-label);font-size:10px;font-weight:700;color:var(--g4);
+    letter-spacing:0.3px;min-width:54px;flex-shrink:0;padding-top:2px;
+  }
+  .tbl td:last-child{margin-top:8px;padding-top:8px;border-top:1px solid var(--g1);}
+  .tbl td:last-child:before{display:none;}
+  .tbl tr.loading-row,.tbl tr.loading-row td{display:block;border:none;background:transparent;padding:16px 0;width:100%;}
+  .empty-state{padding:24px 16px;}
+
+  /* modal 從底部彈出 */
+  .modal{border-radius:14px 14px 0 0;position:fixed;bottom:0;left:0;right:0;max-height:88vh;max-width:100%;}
+  .modal-overlay{align-items:flex-end;}
   .fld-row{grid-template-columns:1fr;}
-  .tbl th:nth-child(3),.tbl td:nth-child(3){display:none;}
+  .intake-preview{grid-template-columns:1fr 1fr;}
+  .toast{bottom:12px;right:12px;left:12px;max-width:none;text-align:center;}
 }
 </style>
 </head>
@@ -452,14 +490,14 @@ function renderTodayTable(list) {
   }
   tb.innerHTML = list.map(r => `
     <tr>
-      <td><strong>${r.name}</strong></td>
-      <td style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
-      <td style="font-size:12px;color:var(--g5)">${r.lineId}</td>
-      <td style="font-size:11px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
-      <td>${renderClaimCell(r)}</td>
+      <td data-label="姓名"><strong>${r.name}</strong></td>
+      <td data-label="電話" style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
+      <td data-label="LINE" style="font-size:12px;color:var(--g5)">${r.lineId}</td>
+      <td data-label="時間" style="font-size:11px;color:var(--g5)">${fmtTime(r.submittedAt)}</td>
+      <td data-label="認領">${renderClaimCell(r)}</td>
       <td><div style="display:flex;gap:4px;flex-wrap:wrap">
-        <button class="btn btn-teal" onclick="openModal('${r.phone}')">👤 建立</button>
-        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋</button>
+        <button class="btn btn-teal" onclick="openModal('${r.phone}')">👤 建立帳號</button>
+        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋 建檔</button>
       </div></td>
     </tr>`).join('');
 }
@@ -475,15 +513,15 @@ function renderPendingTable(list) {
     const [bg, color] = days >= 7 ? ['#ede9fe','#7c3aed'] : days >= 3 ? ['#fee2e2','#dc2626'] : ['#fef3c7','#92400e'];
     const daysBadge = `<span class="chip" style="background:${bg};color:${color}">${days === 0 ? '今天' : days + ' 天'}</span>`;
     return `<tr>
-      <td><strong>${r.name}</strong></td>
-      <td style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
-      <td style="font-size:12px;color:var(--g5)">${r.lineId}</td>
-      <td style="font-size:11px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
-      <td>${daysBadge}</td>
-      <td>${renderClaimCell(r)}</td>
+      <td data-label="姓名"><strong>${r.name}</strong></td>
+      <td data-label="電話" style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
+      <td data-label="LINE" style="font-size:12px;color:var(--g5)">${r.lineId}</td>
+      <td data-label="時間" style="font-size:11px;color:var(--g5)">${fmtTime(r.submittedAt)}</td>
+      <td data-label="等待">${daysBadge}</td>
+      <td data-label="認領">${renderClaimCell(r)}</td>
       <td><div style="display:flex;gap:4px;flex-wrap:wrap">
-        <button class="btn btn-teal" onclick="openModal('${r.phone}')">👤 建立</button>
-        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋</button>
+        <button class="btn btn-teal" onclick="openModal('${r.phone}')">👤 建立帳號</button>
+        <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋 建檔</button>
       </div></td>
     </tr>`;
   }).join('');
@@ -497,14 +535,14 @@ function renderDoneTable(list) {
   }
   tb.innerHTML = list.map(r => `
     <tr>
-      <td><strong>${r.name}</strong></td>
-      <td style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
-      <td style="font-size:12px;color:var(--g5)">${r.lineId}</td>
-      <td>${r.rdName ? `<span class="chip chip-rd">👩‍⚕️ ${r.rdName}</span>` : '<span style="color:var(--g4);font-size:11px">—</span>'}</td>
-      <td style="font-size:11px;color:var(--g5);white-space:nowrap">${fmtTime(r.submittedAt)}</td>
+      <td data-label="姓名"><strong>${r.name}</strong></td>
+      <td data-label="電話" style="font-family:monospace;font-size:12px;color:var(--g5)">${r.phone}</td>
+      <td data-label="LINE" style="font-size:12px;color:var(--g5)">${r.lineId}</td>
+      <td data-label="負責人">${r.rdName ? `<span class="chip chip-rd">👩‍⚕️ ${r.rdName}</span>` : '<span style="color:var(--g4);font-size:11px">—</span>'}</td>
+      <td data-label="時間" style="font-size:11px;color:var(--g5)">${fmtTime(r.submittedAt)}</td>
       <td><div style="display:flex;gap:4px;flex-wrap:wrap">
         <button class="btn btn-outline" onclick="viewIntake('${r.phone}')">📋 建檔資料</button>
-        <button class="btn btn-red" onclick="removeRecord('${r.phone}','${r.name}')">🗑️</button>
+        <button class="btn btn-red" onclick="removeRecord('${r.phone}','${r.name}')">🗑️ 移除</button>
       </div></td>
     </tr>`).join('');
 }
